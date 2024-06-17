@@ -63,8 +63,9 @@ const Timer = () => {
                             </Text>
                         )}
                     </CountdownCircleTimer>
-                    <View style={{flexDirection: 'row', padding: 10}}>
+                    <View style={styles.buttons}>
                         <Button title={timer.isPlaying ? "Pause" : "Play"} onPress={() => pauseOrPlay(timer.id)} />
+                            <View style={{width: 10}}></View>
                         <Button title="Delete" onPress={() => deleteTimer(timer.id)} />
                     </View>
                 </View>
@@ -105,7 +106,7 @@ const Timer = () => {
                 />
                 <Button title="New timer" onPress={startNewTimer} />
             </View>
-            <View style={styles.timer}>
+            <View>
                 {createTimers()}
             </View>
         </View>
@@ -114,7 +115,6 @@ const Timer = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
         width: '100%',
@@ -128,19 +128,21 @@ const styles = StyleSheet.create({
         width: '80%',
         marginBottom: 10,
     },
-    timer: {
-        alignItems: 'center',
-    },
     label: {
         fontSize: 20,
         color: '#004777',
     },
     timerContainer: {
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-        width: '100%',
+        flexDirection: 'column',
+        flex: 1,
+        alignItems: 'center',
     },
+    buttons: {
+        flexDirection: 'row',
+        margin: 10,
+        flex: 1,
+        alignContent: 'space-around',
+    }
 });
 
 export default Timer;
