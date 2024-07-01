@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
-        width: '80%',
+        width: '20%',
         marginBottom: 10,
     },
     label: {

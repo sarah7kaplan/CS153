@@ -22,7 +22,7 @@ const GroceryList = () => {
     return (
         <View style={styles.container}>
             <TextInput 
-                style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                style={{height: 40, borderColor: 'gray', borderWidth: 1, backgroundColor: 'white'}}
                 onChangeText={text => setIngredient(text)}
                 value={ingredient} />
             <Button

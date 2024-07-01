@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import {useValue} from '../ValueContext';
+import Substitution from '../Substitution';
 
 function SubstitutionScreen() {
-    const {currentValue} = useValue();
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>Common Substitutions</Text>
+        <Text style={styles.header}>Substitution Helper</Text>
+        <Substitution />
       </View>
     );
 }

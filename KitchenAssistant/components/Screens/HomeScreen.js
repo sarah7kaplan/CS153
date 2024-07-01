@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet, TextInput} from 'react-native';
 import {useValue} from '../ValueContext';
 
@@ -18,11 +18,11 @@ function HomeScreen() {
             </View>
             <View style={{...styles.container, flex: 4, justifyContent: 'flex-start'}}>
                 <Text style={styles.bodyText}>
-                    Please log in or sign up to continue:
+                    Please enter your name!
                 </Text>
                 <TextInput 
                     style={styles.input}
-                    placeholder="Username"
+                    placeholder="Your name"
                     onChangeText={(text) => {
                         setCurrentValue({...currentValue, username: text});
                     }}
