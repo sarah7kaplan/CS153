@@ -11,14 +11,14 @@ const Timer = () => {
     const [num, setNum] = useState(0);
 
     const startNewTimer = () => {
-        const totalSeconds = (parseInt(seconds))+(parseInt(minutes)*60)+(parseInt(hours)*3600);
+        const totalSeconds = parseInt(seconds) + parseInt(minutes) * 60 + parseInt(hours) * 3600;
         const newTimer = {
             id: num,
             label,
             duration: totalSeconds,
-            isPlaying: true
+            isPlaying: true,
         };
-        setNum(num+1);
+        setNum(num + 1);
         setTimers([...timers, newTimer]);
         setLabel('');
         setSeconds('');
@@ -27,97 +27,89 @@ const Timer = () => {
     };
 
     const deleteTimer = (id) => {
-        setTimers(timers.filter(timer => timer.id !== id));
+        setTimers(timers.filter((timer) => timer.id !== id));
     };
 
     const pauseOrPlay = (id) => {
         const newTimers = [...timers];
-        for (let i=0; i<newTimers.length; i++) {
-            if (newTimers[i].id == id) {
-                newTimers[i].isPlaying = !newTimers[i].isPlaying;
-                i = newTimers.length;
-            }
+        const index = newTimers.findIndex((timer) => timer.id === id);
+        if (index !== -1) {
+            newTimers[index].isPlaying = !newTimers[index].isPlaying;
+            setTimers(newTimers);
         }
-        setTimers(newTimers);
     };
 
     const createTimers = () => {
-        const actualTimers = [];
-        for (let i = 0; i < timers.length; i++) {
-            const timer = timers[i];
-            actualTimers.push(
-                <View style={styles.timerContainer}>
-                    <Text style={styles.label}>
-                        {timer.label}
-                    </Text>
-                    <CountdownCircleTimer
-                        isPlaying={timer.isPlaying}
-                        duration={timer.duration}
-                        colors={'#004777'}
-                        onComplete={() => ({ shouldRepeat: false })}
-                        size={100}
-                    >
-                        {({ remainingTime, color }) => (
-                            <Text style={{ color, fontSize: 20 }}>
-                                {remainingTime}
-                            </Text>
-                        )}
-                    </CountdownCircleTimer>
-                    <View style={styles.buttons}>
-                        <Button title={timer.isPlaying ? "Pause" : "Play"} onPress={() => pauseOrPlay(timer.id)} />
-                            <View style={{width: 10}}></View>
-                        <Button title="Delete" onPress={() => deleteTimer(timer.id)} />
-                    </View>
+        return timers.map((timer) => (
+            <View key={timer.id} style={styles.timerContainer}>
+                <Text style={styles.label}>{timer.label}</Text>
+                <CountdownCircleTimer
+                    isPlaying={timer.isPlaying}
+                    duration={timer.duration}
+                    colors={['#7F00FF', '#7F00FF', '#7F00FF']}
+                    onComplete={() => [{ shouldRepeat: false, text: 'Completed' }]}
+                    size={100}
+                >
+                    {({ remainingTime, color }) => (
+                        <Text style={{ color, fontSize: 20 }}>{remainingTime}</Text>
+                    )}
+                </CountdownCircleTimer>
+                <View style={styles.buttons}>
+                    <Button
+                        title={timer.isPlaying ? 'Pause' : 'Play'}
+                        onPress={() => pauseOrPlay(timer.id)}
+                        color="darkmagenta"  // Updated button color
+                    />
+                    <View style={{ width: 10 }} />
+                    <Button title="Delete" onPress={() => deleteTimer(timer.id)} color="red" />
                 </View>
-            );
-        }
-        return actualTimers;
+            </View>
+        ));
     };
 
     return (
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
-                placeholder='Timer Label'
-                onChangeText={text => setLabel(text)}
+                placeholder="Timer Label"
+                onChangeText={(text) => setLabel(text)}
                 value={label}
             />
-            <View style={{ ...styles.container, flexDirection: 'column', marginBottom: 10 }}>
+            <View style={styles.timeInputs}>
                 <TextInput
                     style={styles.input}
-                    placeholder='seconds'
-                    keyboardType='numeric'
-                    onChangeText={text => setSeconds(text)}
+                    placeholder="ss"
+                    keyboardType="numeric"
+                    onChangeText={(text) => setSeconds(text)}
                     value={seconds}
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder='minutes'
-                    keyboardType='numeric'
-                    onChangeText={text => setMinutes(text)}
+                    placeholder="mm"
+                    keyboardType="numeric"
+                    onChangeText={(text) => setMinutes(text)}
                     value={minutes}
                 />
                 <TextInput
                     style={styles.input}
-                    placeholder='hours'
-                    keyboardType='numeric'
-                    onChangeText={text => setHours(text)}
+                    placeholder="hh"
+                    keyboardType="numeric"
+                    onChangeText={(text) => setHours(text)}
                     value={hours}
                 />
-                <Button title="New timer" onPress={startNewTimer} />
             </View>
-            <View>
-                {createTimers()}
-            </View>
+            <Button title="New Timer" onPress={startNewTimer} color="darkmagenta" />  {/* Updated button color */}
+            <View style={styles.timers}>{createTimers()}</View>
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
-        width: '100%',
+        backgroundColor: '#E0BBE4',
         padding: 20,
     },
     input: {
@@ -125,24 +117,36 @@ const styles = StyleSheet.create({
         height: 40,
         borderColor: 'gray',
         borderWidth: 1,
-        width: '20%',
+        width: '50%',
         marginBottom: 10,
+        paddingHorizontal: 10,
     },
     label: {
         fontSize: 20,
-        color: '#004777',
+        color: '#7F00FF',
+        marginBottom: 10,
     },
     timerContainer: {
         flexDirection: 'column',
-        flex: 1,
         alignItems: 'center',
+        marginBottom: 20,
     },
     buttons: {
         flexDirection: 'row',
-        margin: 10,
-        flex: 1,
-        alignContent: 'space-around',
-    }
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    timeInputs: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '60%',
+        marginBottom: 10,
+    },
+    timers: {
+        marginTop: 20,
+        width: '100%',
+    },
 });
 
 export default Timer;

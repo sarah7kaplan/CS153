@@ -14,8 +14,8 @@ function DryScreen() {
 
     const convToGrams = () => {
         if (ounces != 0) {
-          const g = parseFloat(ounces) / 0.03527;
-          setGrams(g.toFixed(2));
+            const g = parseFloat(ounces) / 0.03527;
+            setGrams(g.toFixed(2));
         }
     };
 
@@ -39,12 +39,12 @@ function DryScreen() {
                 onChangeText={(text) => setOunces(parseFloat(text))}
                 keyboardType="numeric"
             />
-            <View style={{...styles.container, flexDirection: 'row'}}>
-                <View style={{marginRight: 10}}>
-                    <Button title="Convert to Ounces" onPress={convToOunces} />
+            <View style={styles.buttonContainer}>
+                <View style={{marginBottom: 10}}>
+                    <Button title="Convert to Ounces" onPress={convToOunces} color="darkmagenta" />
                 </View>
                 <View>
-                    <Button title="Convert to Grams" onPress={convToGrams} />
+                    <Button title="Convert to Grams" onPress={convToGrams} color="darkmagenta" />
                 </View>
             </View>
             {grams != 0 && (
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
+        backgroundColor: '#E0BBE4',
     },
     label: {
         fontSize: 18,
@@ -79,6 +80,11 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         paddingHorizontal: 10,
+        marginBottom: 20,
+    },
+    buttonContainer: {
+        flexDirection: 'column',
+        width: '80%',
         marginBottom: 20,
     },
     result: {

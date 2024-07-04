@@ -4,11 +4,11 @@ import axios from 'axios';
 import open_api_key from './open_api_key';
 
 const Substitution = () => {
-    const [data,setData] = useState([]);
-    const [ingredientText,setIngredientText] = useState("");
-    const [quantityText,setQuantityText] = useState("");
-    const [prompt,setPrompt] = useState("What is a common substitute for brown sugar?");
-    const [loading,setLoading] = useState(true);
+    const [data, setData] = useState({ choices: [] });
+    const [ingredientText, setIngredientText] = useState("");
+    const [quantityText, setQuantityText] = useState("");
+    const [prompt, setPrompt] = useState("What is a common substitute for brown sugar?");
+    const [loading, setLoading] = useState(true);
     const APIKey = open_api_key;
 
     const getResponse = useCallback(async () => {
@@ -22,7 +22,7 @@ const Substitution = () => {
                     headers: {
                         Accept: 'application/json, text/plain, */*',
                         'Content-Type': 'application/json',
-                        Authorization: 'Bearer ' +APIKey,
+                        Authorization: 'Bearer ' + APIKey,
                     },
                 };
                 const prefix =
@@ -32,7 +32,7 @@ const Substitution = () => {
     
                 const msg_data = {
                     'model': 'gpt-3.5-turbo',
-                    'messages': [{'role': 'user', 'content': prefix+prompt}],
+                    'messages': [{ 'role': 'user', 'content': prefix + prompt }],
                     'temperature': 0.7,
                 };
     
@@ -55,81 +55,97 @@ const Substitution = () => {
                 setLoading(false);
             }
         }
-    }, [prompt]);
-    
-
-
-    useEffect(() => {getResponse()}, [prompt])
+    }, [prompt, APIKey]);    
 
     useEffect(() => {
-        const handler = setTimeout(() => {
-            getResponse();
-        }, 500); // pause 500ms, was having problems with sending too many requests
-
-        return () => {
-            clearTimeout(handler);
-        };
+        getResponse();
     }, [prompt, getResponse]);
 
-    const ChatReponse = ({role,content}) => (
-        <View style={{backgroundColor:'lightblue',margin:10,padding:20,}}>
-            <Text>ChatGPT Response to the prompt is:</Text>
-            <Text style={{backgroundColor:'white'}}>{content}</Text>
+    const ChatResponse = ({ role, content }) => (
+        <View style={styles.chatContainer}>
+            <Text style={styles.chatRole}>{role}</Text>
+            <Text style={styles.chatContent}>{content}</Text>
         </View>
     );
 
-    const debugging = true;
-    return(
-        <SafeAreaView style={{flex:1, fontSize:24, margin:30}}>
-            <Text style={{marginTop:30}}>Ingredient: </Text>
+    return (
+        <SafeAreaView style={styles.container}>
+            <Text style={styles.label}>Ingredient:</Text>
             <TextInput
                 style={styles.input}
                 onChangeText={text => setIngredientText(text)}
                 value={ingredientText}
+                placeholder="Enter ingredient"
             />
-            <Text>Quantity:</Text>
+            <Text style={styles.label}>Quantity:</Text>
             <TextInput 
                 style={styles.input}
-                onChangeText = {text => setQuantityText(text)}
-                value = {quantityText}
+                onChangeText={text => setQuantityText(text)}
+                value={quantityText}
+                placeholder="Enter quantity"
             />
 
             <Button
-                onPress={() => {setLoading(true); setData({choices:[]}); setPrompt(quantityText+" "+ingredientText);}}
-                title={loading?'awaiting response':"Ask GPT"}
-                color="#841584"
-                accessibilityLabel="Send"
+                onPress={() => {
+                    setLoading(true);
+                    setData({ choices: [] });
+                    setPrompt(quantityText + " " + ingredientText);
+                }}
+                title={loading ? 'Awaiting response' : 'Ask GPT'}
+                disabled={loading || !ingredientText || !quantityText}
+                color="darkmagenta"
             />
 
-            
-            {debugging && 
-            <Text>
-                {JSON.stringify(data.choices) }
-            </Text>}
-            
-            
             <FlatList
                 data={data.choices}
-                keyExtractor={({ index }) => index}
-                renderItem={({item}) => (
-                    <ChatReponse {...item.message} />
-                   
-                    
-                )}
-            />   
-
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => <ChatResponse {...item.message} />}
+                style={styles.flatList}
+            />
         </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#E0BBE4',
+    },
+    label: {
+        fontSize: 18,
+        marginBottom: 10,
+    },
     input: {
         backgroundColor: 'white',
-        height: 40, 
-        borderColor: 'gray', 
-        borderWidth: 1, 
-        padding:10, 
-        margin:10
+        height: 40,
+        width: '80%',
+        borderColor: 'gray',
+        borderWidth: 1,
+        paddingHorizontal: 10,
+        marginBottom: 20,
+    },
+    flatList: {
+        width: '100%',
+        marginTop: 20,
+    },
+    chatContainer: {
+        backgroundColor: 'lightblue',
+        marginVertical: 10,
+        padding: 10,
+        borderRadius: 8,
+        width: '100%',
+    },
+    chatRole: {
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    chatContent: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 8,
     },
 });
 

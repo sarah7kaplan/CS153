@@ -5,7 +5,6 @@ import Substitution from '../Substitution';
 function SubstitutionScreen() {
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>Substitution Helper</Text>
         <Substitution />
       </View>
     );
@@ -18,10 +17,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 50,
         textAlign: 'center',
-    },
-    header: {
-        fontWeight: "bold",
-        fontSize: '110%',
+        backgroundColor: '#E0BBE4',
     },
     bodyText: {
         fontSize: '80%',

@@ -15,19 +15,20 @@ function GroceryScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 50,
-        textAlign: 'center',
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 50,
+      textAlign: 'center',
+      backgroundColor: '#E0BBE4',
     },
     header: {
-        fontWeight: "bold",
-        fontSize: '110%',
+      fontWeight: "bold",
+      fontSize: '110%',
     },
     bodyText: {
-        fontSize: '80%',
-        textAlign: 'center',
+      fontSize: '80%',
+      textAlign: 'center',
     },
 })
 

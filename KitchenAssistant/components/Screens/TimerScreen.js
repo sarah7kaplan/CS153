@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: 50,
         textAlign: 'center',
+        backgroundColor: '#E0BBE4',
     },
     header: {
         fontWeight: "bold",

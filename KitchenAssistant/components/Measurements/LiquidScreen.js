@@ -38,12 +38,12 @@ function LiquidScreen() {
                 onChangeText={(text) => setFluidOunces(parseFloat(text))}
                 keyboardType="numeric"
             />
-            <View style={{...styles.container, flexDirection: 'row'}}>
-                <View style={{marginRight: 10}}>
-                    <Button title="Convert to Fluid Ounces" onPress={convMLtoFO} />
+            <View style={styles.buttonContainer}>
+                <View style={{marginBottom: 10}}>
+                    <Button title="Convert to Fluid Ounces" onPress={convMLtoFO} color="darkmagenta" />
                 </View>
                 <View>
-                    <Button title="Convert to Milliliters" onPress={convFOtoML} />
+                    <Button title="Convert to Milliliters" onPress={convFOtoML} color="darkmagenta" />
                 </View>
             </View>
             {milliliters != 0 && (
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
+        backgroundColor: '#E0BBE4',
     },
     label: {
         fontSize: 18,
@@ -78,6 +79,11 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         borderWidth: 1,
         paddingHorizontal: 10,
+        marginBottom: 20,
+    },
+    buttonContainer: {
+        flexDirection: 'col',
+        width: '80%',
         marginBottom: 20,
     },
     result: {
