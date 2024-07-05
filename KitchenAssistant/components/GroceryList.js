@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList, Modal, Pressable } from 'react-native';
+import { useValue } from './ValueContext';
 
 const Item = ({ item, onDelete }) => (
     <View style={styles.item}>
@@ -14,19 +15,31 @@ const GroceryList = () => {
     const [ingredients, setIngredients] = useState([]);
     const [IDnum, setIDnum] = useState(0);
     const [modalVisible, setModalVisible] = useState(false);
+    const {currentValue, setCurrentValue} = useValue();
+
+    useEffect(() => {
+        setIngredients(currentValue.groceries || []);
+        const maxID = Math.max(...(currentValue.groceries || []).map(item => item.ID), 0);
+        setIDnum(maxID + 1);
+    }, [currentValue]);
 
     const deleteIngredient = (ingr) => {
-        setIngredients(ingredients.filter(ingredient => ingredient.ID !== ingr.ID));
-    }
+        const updatedIngredients = ingredients.filter(item => item.ID !== ingr.ID);
+        setIngredients(updatedIngredients);
+        setCurrentValue({...currentValue, groceries: updatedIngredients});
+    };
 
     const addIngredient = () => {
         if (ingredient !== '') {
-            setIngredients([...ingredients, {name: ingredient, ID: IDnum}]);
+            const newIngredient = {name: ingredient, ID: IDnum};
+            const updatedIngredients = [...ingredients, newIngredient];
+            setIngredients(updatedIngredients);
             setIDnum(IDnum + 1);
             setIngredient('');
             setModalVisible(false);
+            setCurrentValue({...currentValue, groceries: updatedIngredients});
         }
-    }
+    };
 
     return (
         <View style={styles.container}>
@@ -67,7 +80,7 @@ const GroceryList = () => {
             />
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

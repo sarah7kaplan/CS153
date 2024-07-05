@@ -1,9 +1,22 @@
-import React from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import { useValue } from '../ValueContext';
 
 function HomeScreen() {
     const {currentValue, setCurrentValue} = useValue();
+    const [usernameInput, setUsernameInput] = useState('');
+
+    const handleInputChange = (text) => {
+        setUsernameInput(text);
+    };
+
+    const saveUsername = () => {
+        setCurrentValue({...currentValue, username: usernameInput});
+    };
+
+    const logout = () => {
+        setCurrentValue({...currentValue, username: ''});
+    };
 
     return (
         <View style={styles.container}>
@@ -16,15 +29,28 @@ function HomeScreen() {
                     To find a common substitution for an ingredient, go to the Substitutions page.
                 </Text>
             </View>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Please enter your name!"
-                    onChangeText={(text) => {
-                        setCurrentValue({...currentValue, username: text});
-                    }}
-                />
-            </View>
+            {currentValue.username ? (
+                <View style={styles.inputContainer}>
+                    <Button 
+                        title="Log Out"
+                        onPress={logout}
+                        color="darkmagenta"
+                    />
+                </View>
+            ) : (
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={{...styles.input, marginBottom:5}}
+                        placeholder="Please enter your name!"
+                        onChangeText={handleInputChange}
+                    />
+                    <Button
+                        title="Save"
+                        onPress={saveUsername}
+                        color="darkmagenta"
+                    />
+                </View>
+            )}
         </View>
     );
 }

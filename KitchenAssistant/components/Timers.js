@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button, TextInput } from 'react-native';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer';
+import { useValue } from './ValueContext';
 
 const Timer = () => {
     const [timers, setTimers] = useState([]);
@@ -9,6 +10,13 @@ const Timer = () => {
     const [minutes, setMinutes] = useState('');
     const [hours, setHours] = useState('');
     const [num, setNum] = useState(0);
+    const {currentValue, setCurrentValue} = useValue();
+
+    useEffect(() => {
+        setTimers(currentValue.timers || []);
+        const maxNum = Math.max(...(currentValue.timers || []).map(item => item.id), 0);
+        setNum(maxNum + 1);
+    }, [currentValue]);
 
     const startNewTimer = () => {
         const totalSeconds = parseInt(seconds) + parseInt(minutes) * 60 + parseInt(hours) * 3600;
@@ -19,7 +27,9 @@ const Timer = () => {
             isPlaying: true,
         };
         setNum(num + 1);
-        setTimers([...timers, newTimer]);
+        const updatedTimers = [...timers, newTimer];
+        setTimers(updatedTimers);
+        setCurrentValue({...currentValue, timers: updatedTimers})
         setLabel('');
         setSeconds('');
         setMinutes('');
@@ -27,7 +37,9 @@ const Timer = () => {
     };
 
     const deleteTimer = (id) => {
-        setTimers(timers.filter((timer) => timer.id !== id));
+        const updatedTimers = timers.filter((timer) => timer.id !== id);
+        setTimers(updatedTimers);
+        setCurrentValue({...currentValue, timers: updatedTimers});
     };
 
     const pauseOrPlay = (id) => {
@@ -58,7 +70,7 @@ const Timer = () => {
                     <Button
                         title={timer.isPlaying ? 'Pause' : 'Play'}
                         onPress={() => pauseOrPlay(timer.id)}
-                        color="darkmagenta"  // Updated button color
+                        color="darkmagenta"
                     />
                     <View style={{ width: 10 }} />
                     <Button title="Delete" onPress={() => deleteTimer(timer.id)} color="red" />
@@ -98,7 +110,7 @@ const Timer = () => {
                     value={hours}
                 />
             </View>
-            <Button title="New Timer" onPress={startNewTimer} color="darkmagenta" />  {/* Updated button color */}
+            <Button title="New Timer" onPress={startNewTimer} color="darkmagenta" /> 
             <View style={styles.timers}>{createTimers()}</View>
         </View>
     );
