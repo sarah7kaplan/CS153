@@ -1,1 +1,3 @@
-This is a collection of projects made for CS153, the main one being the Kitchen Assistant App I created!
+This is the code for Kitchen Assistant, a React Native app to help with the user's kitchen needs.
+This app helps a user set timers, create a grocery list, convert between measurements, and discover substitutions for missing ingredients.
+To run this app, download the code and export an OpenAI API key in a page called open_api_key.js, then start it up!
